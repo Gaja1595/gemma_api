@@ -1,0 +1,2 @@
+{"event": "session_start", "session_id": "e8e4ef5d-ef16-474d-b5b8-80f842446e78", "timestamp": "2025-05-22T22:38:06.516044", "message": "New API session started"}
+{"event": "session_end", "session_id": "e8e4ef5d-ef16-474d-b5b8-80f842446e78", "timestamp": "2025-05-22T22:38:21.211238", "message": "API session ended"}

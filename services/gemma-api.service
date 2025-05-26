@@ -1,0 +1,17 @@
+[Unit]
+Description=Gemma API Service
+After=network.target ollama.service
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/gemma_api
+Environment="PATH=/home/ubuntu/gemma_api/venv/bin"
+ExecStart=/bin/bash /home/ubuntu/gemma_api/start_api.sh
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target

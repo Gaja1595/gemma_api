@@ -1,0 +1,4 @@
+{"event": "session_start", "session_id": "72fb91cf-eb95-4840-b39c-bdb8199af7b0", "timestamp": "2025-05-14T10:30:41.590113", "message": "New API session started"}
+{"event": "request_start", "session_id": "72fb91cf-eb95-4840-b39c-bdb8199af7b0", "request_id": "61bd5a21-2977-461e-9bd2-95a41837a863", "endpoint": "/intervet2", "timestamp": "2025-05-14T10:30:47.946411", "message": "Request started for endpoint: /intervet2"}
+{"event": "request_complete", "session_id": "72fb91cf-eb95-4840-b39c-bdb8199af7b0", "request_id": "61bd5a21-2977-461e-9bd2-95a41837a863", "endpoint": "/intervet2", "timestamp": "2025-05-14T10:31:28.295973", "total_time_seconds": 40.3495614528656, "status_code": 200, "message": "Request completed in 40.3496s with status 200"}
+{"event": "session_end", "session_id": "72fb91cf-eb95-4840-b39c-bdb8199af7b0", "timestamp": "2025-05-14T10:32:20.100598", "message": "API session ended"}
