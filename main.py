@@ -5,7 +5,7 @@ import tempfile
 import logging
 import time
 import asyncio
-import datetime # Added
+import datetime 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -38,7 +38,7 @@ class UserFriendlyFilter(logging.Filter):
         elif "Starting resume parsing" in record.msg: record.msg = "🚀 Starting resume analysis..."
         elif "Starting job description parsing" in record.msg: record.msg = "🚀 Starting job description analysis..."
         elif "Normalizing" in record.msg: record.msg = "📊 Organizing extracted data..."
-        elif "Image fallback for" in record.msg: record.msg = f"↪️ {record.msg}" # Add an icon for fallback
+        elif "Image fallback for" in record.msg: record.msg = f"↪️ {record.msg}" 
         return True
 
 logger = logging.getLogger("gemma-api")
@@ -48,7 +48,7 @@ os.environ.pop('SSL_CERT_FILE', None)
 import ollama
 MODEL_NAME = "gemma3:4b"
 
-MIN_TEXT_LENGTH_FOR_FALLBACK = 50 # Characters
+MIN_TEXT_LENGTH_FOR_FALLBACK = 50 
 
 # <editor-fold desc="Pydantic Models">
 class EducationEntry(BaseModel):
@@ -107,6 +107,7 @@ class MetricsMiddleware(BaseHTTPMiddleware):
             raise
 app.add_middleware(MetricsMiddleware)
 
+from contextlib import asynccontextmanager # Ensure this is at the top-level imports if not already
 @asynccontextmanager
 async def lifespan(_: FastAPI): yield; shutdown_metrics_logger()
 app.router.lifespan_context = lifespan
@@ -197,7 +198,7 @@ async def extract_text_from_image(file_path: str, parsing_prompt_override: Optio
     try:
         current_prompt = parsing_prompt_override
         if not current_prompt:
-            current_prompt = "This document contains important text. Please extract ALL text content from this image..." # Truncated for brevity
+            current_prompt = "This document contains important text. Please extract ALL text content from this image..." 
             logger.info("Using generic image text extraction prompt.")
         else:
             logger.info("Using parsing_prompt_override for image text extraction.")
@@ -401,12 +402,11 @@ async def normalize_resume_data(parsed_data: Dict, convert_skills_to_dict_format
         return ResumeResponse(**normalized_dict).dict(exclude_none=True)
     except Exception as validation_error:
         logger.error(f"Pydantic validation error during resume normalization: {validation_error}", exc_info=True)
-        # Ensure 'name' is present for the minimal error response
         minimal_error_response = {"name": normalized_dict.get("name","Unknown (validation error)")}
         for field in ResumeResponse.__fields__:
             if field not in minimal_error_response:
                 minimal_error_response[field] = ResumeResponse.__fields__[field].default
-        minimal_error_response["error"] = "Data normalization/validation failed" # Add error field
+        minimal_error_response["error"] = "Data normalization/validation failed" 
         return ResumeResponse(**minimal_error_response).dict(exclude_none=True)
 
 
@@ -694,7 +694,7 @@ def _prepare_llm_evaluation_context(resume_data: Dict, jd_data: Dict) -> Dict:
                     year_match = re.search(r'(\d{4})\s*-\s*(\d{4}|\bpresent\b)', duration.lower())
                     if year_match:
                         start_year = int(year_match.group(1)); end_year_str = year_match.group(2)
-                        current_year = datetime.date.today().year # Use datetime
+                        current_year = datetime.date.today().year 
                         end_year = current_year if end_year_str.lower() == "present" else int(end_year_str)
                         candidate_yoe += (end_year - start_year)
                     else:
@@ -709,7 +709,7 @@ def _prepare_llm_evaluation_context(resume_data: Dict, jd_data: Dict) -> Dict:
     context["jd_education_summary"] = ", ".join(jd_data.get("education_requirements",[])) if jd_data.get("education_requirements") else jd_data.get("education_details", {}).get("degree_level", "N/A")
     cert_summary = [cert.get("name") for cert in resume_data.get("certifications", []) if isinstance(cert, dict) and cert.get("name")]
     context["candidate_certifications_summary"] = ", ".join(cert_summary) if cert_summary else "N/A"; context["jd_certifications_summary"] = "N/A"
-    logger.debug(f"LLM evaluation context prepared: {json.dumps(context, indent=2)}") # Changed to DEBUG for potentially large output
+    logger.debug(f"LLM evaluation context prepared: {json.dumps(context, indent=2)}") 
     return context
 
 def create_llm_evaluation_prompt(resume_data_summary: Dict, jd_data_summary: Dict, pre_processed_context: Dict) -> str:
@@ -843,7 +843,7 @@ async def generate_jd_only_questions(jd_text: str) -> Dict:
     return questions_data
 
 @app.post("/jd_only", response_model=Dict)
-async def generate_jd_only_questions_endpoint(file: UploadFile = File(...), request: Request): 
+async def generate_jd_only_questions_endpoint(request: Request, file: UploadFile = File(...)): 
     temp_file_path = None
     metrics = getattr(request.state, "metrics", None)
     try:
@@ -991,5 +991,7 @@ async def evaluate_candidate_job_fit_from_files_endpoint(request: Request, resum
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+[end of main.py]
 
 [end of main.py]
